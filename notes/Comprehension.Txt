@@ -1,0 +1,39 @@
+CADRAGE ET COMPREHENSION :
+
+DataSet : historiques de boiturues avec leur kilometrage et leur prix (dataset = ensemble de nos observation)
+Objectif : Modele capable d'estimer le prix d'une nouvelle voiture a partir de son kiloemtrage
+OBservation/SAmple : voiture
+Feature(une information donnee au model pour effectuer sa prediction)  / Variable explciative : km (ici single feature mais en realite, plusieurs : annee puissance marque carburant etat..)
+Target / variable cible/ objectif a predire : prix
+Model : Regression lineaire
+Parametres : Theta0 Theta1
+Training : trouver theta0 theta1 et ameliorer precision 
+Inherence/ prediction : estimer prix
+Algorithme d'optimisation utilisee : gradient descent
+
+le programme doit determiner les parametres a partir des donnees = idee fondamentale du ML
+Ici entrainement supervisee car pour un ensemble de features on a deja la target. 
+Regression car donnee : valeur numerique continue (sinon on aurait appeler ca classifcation si categorie)
+Machine Learning -> Supervised Learning -> Regression -> Linear Regression 
+
+Le modele est lineaire (ici car formule simple), mais l'algorithme est un gradient descent donc la methode pour trouver les parametres.
+Gradient descent -> trouve -> theta0 et theta1 -> definissent -> linear regression
+
+Training = consiste a determiner les parametres a partir des observations afin de resoudre le modele lineaire aussi proche que posssible ŷ (ma valeur , alors que y la valeur theorique, la difference sera l'erreur, et l'erreur a un role fondamentale permettant d'ameliorer le modele)
+Sauvegardes des parametres dans un fichier JSON, afin d'eviter une reutilisation des parametres.
+Maintenant que le training est fait : Inference : nouveau km -> trained model -> prediction
+On peut dire que Inference est le workflow utilisateur finale, alors que le training est le worflow entrainement 
+
+
+MATHEMATIQUE :
+
+tmptheta0 = derive partielle en fonction de theta0
+tmptheta1 = derive partielle en fonction de theta1
+
+
+
+FINAL :
+COmparer resultat avec : sklkearn.linear_model.LinearRegression
+			 numpy.polyfit
+			 scipy optimisation
+			 Modele ML deja implemente

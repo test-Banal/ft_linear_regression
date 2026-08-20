@@ -1,0 +1,397 @@
+============================================================
+PYTHON / UV — AIDE-MÉMOIRE
+============================================================
+
+
+------------------------------------------------------------
+1. LANCER UN PROGRAMME PYTHON
+------------------------------------------------------------
+
+uv run python fichier.py
+
+Exemple :
+uv run python src/mon_projet/main.py
+
+
+------------------------------------------------------------
+2. QUALITÉ DU CODE
+------------------------------------------------------------
+
+RUFF — projets DATA / perso / Kaggle
+
+Vérifier :
+    uv run --group data ruff check .
+
+Corriger automatiquement ce que Ruff peut corriger :
+    uv run --group data ruff check --fix .
+
+Formatter :
+    uv run --group data ruff format .
+
+
+FLAKE8 — projets SCHOOL / 42
+
+Vérifier :
+    uv run --group school flake8 .
+
+
+MYPY — vérification des types
+
+    uv run mypy src
+
+
+PYTEST — tests
+
+    uv run pytest
+
+
+Couverture des tests (DATA) :
+
+    uv run --group data pytest --cov=src
+
+
+------------------------------------------------------------
+3. DEBUG DANS VS CODE
+------------------------------------------------------------
+
+1. Ouvrir le projet dans VS Code :
+       code .
+
+2. Vérifier l'interpréteur :
+       Python: Select Interpreter
+
+   Choisir :
+       .venv/bin/python
+
+3. Placer un breakpoint.
+
+4. F5
+
+5. Choisir :
+       Python Debugger
+       -> Python File
+
+
+------------------------------------------------------------
+4. UV — À QUOI SERVENT LES FICHIERS ?
+------------------------------------------------------------
+
+pyproject.toml
+    Configuration du projet :
+    - nom
+    - version
+    - dépendances
+    - groupes school/data
+    - configuration Ruff/MyPy/Pytest
+
+uv.lock
+    Versions EXACTES résolues des dépendances.
+    À conserver et à mettre dans Git.
+
+.venv/
+    Environnement Python local du projet.
+    NE PAS mettre dans Git.
+
+.python-version
+    Version Python utilisée par uv.
+
+__init__.py
+    Permet notamment d'identifier un répertoire comme
+    faisant partie d'un package Python.
+
+
+------------------------------------------------------------
+5. INSPECTER UN PROJET
+------------------------------------------------------------
+
+Structure simple :
+    tree -L 2
+
+Structure détaillée sans caches :
+    tree -a -L 3 -I '.git|.venv|__pycache__|.mypy_cache|.ruff_cache|.pytest_cache'
+
+Fichiers suivis par Git :
+    git status
+
+Dépendances :
+    uv tree --depth 1
+
+Dépendances SCHOOL :
+    uv tree --depth 1 --group school
+
+Dépendances DATA :
+    uv tree --depth 1 --group data
+
+Packages réellement installés :
+    uv pip list
+
+Configuration :
+    cat pyproject.toml
+
+
+============================================================
+CRÉER UN NOUVEAU PROJET
+============================================================
+
+IMPORTANT :
+
+Dans mon utilisation normale, JE NE FAIS PLUS :
+
+    mkdir projet
+    uv init
+    uv add ...
+
+Le générateur s'en occupe.
+
+
+------------------------------------------------------------
+6. PROJET SCHOOL / 42
+------------------------------------------------------------
+
+Depuis :
+
+    cd ~/Projects/DataScience
+
+Créer :
+
+    new-python-project ft_linear_regression school
+
+Puis :
+
+    cd ft_linear_regression
+
+Le générateur :
+    - crée le projet
+    - initialise Git
+    - crée .venv
+    - installe les dépendances
+    - prépare Flake8 + MyPy + Pytest
+
+
+Vérification :
+
+    uv tree --depth 1 --group school
+
+Utilisation :
+
+    uv run --group school flake8 .
+    uv run mypy src
+    uv run pytest
+
+
+------------------------------------------------------------
+7. PROJET DATA / KAGGLE / PERSO
+------------------------------------------------------------
+
+Depuis :
+
+    cd ~/Projects/DataScience
+
+Créer :
+
+    new-python-project nom_projet data
+
+Puis :
+
+    cd nom_projet
+
+
+Le générateur prépare notamment :
+
+    data/
+        raw/
+        interim/
+        processed/
+
+    notebooks/
+    src/
+    tests/
+
+    Ruff
+    MyPy
+    Pytest
+    pytest-cov
+    JupyterLab
+    ipykernel
+    pre-commit
+
+
+Vérification :
+
+    uv tree --depth 1 --group data
+
+
+Utilisation :
+
+    uv run --group data ruff check .
+    uv run mypy src
+    uv run pytest
+    uv run --group data pytest --cov=src
+    uv run --group data jupyter-lab
+
+
+============================================================
+8. WORKFLOW AVANT UN COMMIT — DATA
+============================================================
+
+Normalement pre-commit contrôle automatiquement Ruff
+lors du commit.
+
+Mais je peux vérifier manuellement :
+
+    uv run --group data ruff check .
+    uv run --group data ruff format .
+    uv run mypy src
+    uv run pytest
+
+Puis :
+
+    git status
+    git add .
+    git commit -m "message"
+
+
+IMPORTANT :
+    ruff check --fix .
+
+peut MODIFIER les fichiers.
+
+Donc regarder ensuite :
+
+    git diff
+
+
+============================================================
+9. GITHUB — PREMIÈRE CONNEXION D'UN PROJET
+============================================================
+
+Vérifier la branche :
+
+    git branch --show-current
+
+Si nécessaire :
+
+    git branch -M main
+
+
+Vérifier l'état :
+
+    git status
+
+
+Premier commit si nécessaire :
+
+    git add .
+    git commit -m "Initial commit"
+
+
+Créer ensuite un repository VIDE sur GitHub.
+
+Ne pas demander à GitHub de créer :
+    README
+    .gitignore
+    licence
+
+si ces fichiers existent déjà localement.
+
+
+Vérifier SSH si besoin :
+
+    ssh -T git@github.com
+
+
+Vérifier les remotes :
+
+    git remote -v
+
+
+Ajouter GitHub :
+
+    git remote add origin git@github.com:test-banal/NOM_PROJET.git
+
+
+Vérifier :
+
+    git remote -v
+
+
+Premier push :
+
+    git push -u origin main
+
+
+Après le premier push, les suivants deviennent simplement :
+
+    git add .
+    git commit -m "message"
+    git push
+
+
+============================================================
+10. VOGOSPHERE / PROJET 42
+============================================================
+
+Le template local sert comme environnement de travail.
+
+Pour la Vogsphere :
+    - utiliser le repository fourni par 42
+    - respecter exactement la structure demandée par le sujet
+    - ne pas envoyer les fichiers/outils personnels inutiles
+    - vérifier le contenu avant le push
+
+Toujours vérifier :
+
+    git status
+
+puis utiliser le workflow Git demandé par 42.
+
+
+============================================================
+11. COMMANDES DE SECOURS / DIAGNOSTIC
+============================================================
+
+Où suis-je ?
+    pwd
+
+Voir les fichiers :
+    ls -la
+
+Structure :
+    tree -L 2
+
+État Git :
+    git status
+
+Branche :
+    git branch --show-current
+
+Remote :
+    git remote -v
+
+Version Python utilisée par uv :
+    uv run python --version
+
+Python réellement exécuté :
+    uv run which python
+
+Dépendances :
+    uv tree --depth 1
+
+Configuration :
+    cat pyproject.toml
+
+
+
+
+execution :
+uv run python src/ft_linear_regression/__init__.py
+uv run python -m ft_linear_regression.predict
+uv run python -m ft_linear_regression.train
+
+data : commande : uv run jupyter-lab
+
+
+si absence de jupyterlab pour prochain dossier.
+uv add --group school jupyterlab ipykernel matplotlib
+uv sync --group school
+uv run jupyter-lab

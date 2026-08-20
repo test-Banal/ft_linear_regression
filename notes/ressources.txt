@@ -1,0 +1,7 @@
+https://perspective.orange-business.com/fr/tutoriel-regression-lineaire-et-descente-de-gradient-en-machine-learning/
+
+https://www.youtube.com/watch?v=Hf2GEfAGnN4&t=636s
+
+https://mrmint.fr/gradient-descent-algorithm
+
+https://moncoachdata.com/blog/regression-lineaire-avec-python/
