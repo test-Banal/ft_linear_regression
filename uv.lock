@@ -803,6 +803,7 @@ school = [
     { name = "flake8" },
     { name = "ipykernel" },
     { name = "jupyterlab" },
+    { name = "pytest" },
 ]
 
 [package.metadata]
@@ -828,6 +829,7 @@ school = [
     { name = "flake8", specifier = ">=7.3.0" },
     { name = "ipykernel", specifier = ">=7.3.0" },
     { name = "jupyterlab", specifier = ">=4.6.3" },
+    { name = "pytest", specifier = ">=9.1.1" },
 ]
 
 [[package]]

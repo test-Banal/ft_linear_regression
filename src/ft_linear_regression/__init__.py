@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
+from train import training
 
 
 def test_info(data: pd.DataFrame) -> None:
@@ -47,10 +48,11 @@ def main() -> None:
     # resolve() supprime les segments relatifs comme "../.." du chemin.
     data_file = Path(__file__).resolve().parents[2] / "data" / "data.csv"
     data = pd.read_csv(data_file)
-
-    test_info(data)
-    test_show(data)
-    print_fin(data)
+    train_data = data
+    #test_info(data)
+    #test_show(data)
+    #print_fin(data)
+    training(train_data)
 
 
 if __name__ == "__main__":
