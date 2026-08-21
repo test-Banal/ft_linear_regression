@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 from train import training
-
+from train import train_step
 
 def test_info(data: pd.DataFrame) -> None:
     """Affiche les informations utiles pour l'EDA et le contrôle des données."""
@@ -52,8 +52,14 @@ def main() -> None:
     #test_info(data)
     #test_show(data)
     #print_fin(data)
-    training(train_data)
+    #training(train_data)
+    theta0 = 0.0
+    theta1 = 0.0
+    learning_rate = 0.1
 
+    train_step(train_data, theta0, theta1, learning_rate)
+
+    
 
 if __name__ == "__main__":
     main()
