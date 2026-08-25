@@ -2,8 +2,6 @@ import pandas as pd
 from pathlib import Path
 from predict import estimate_price
 
-def estimate_price(mileage: float, theta0: float, theta1: float) -> float:
-        return theta0 + theta1 * mileage
 
 
 def training(train_data: pd.DataFrame) -> None:
@@ -29,7 +27,8 @@ def training(train_data: pd.DataFrame) -> None:
 
 def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_rate:0) -> tuple[float, float]:
 
-    mileage = train_data["km"]
+#    mileage = train_data["km"]
+    mileage = train_data["km"] / train_data["km"].max()
     price  = train_data["price"]
     m = len(mileage)
     #print(f"M vaut: {m}")
@@ -48,7 +47,6 @@ def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_
     theta0 = theta0 - learning_rate*gradient_theta0
     theta1 = theta1 - learning_rate*gradient_theta1
 
-    print(f"theta0: {theta0}")
-    print(f"theta1: {theta1}")
+
 
     return theta0, theta1

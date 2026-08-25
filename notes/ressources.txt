@@ -5,3 +5,7 @@ https://www.youtube.com/watch?v=Hf2GEfAGnN4&t=636s
 https://mrmint.fr/gradient-descent-algorithm
 
 https://moncoachdata.com/blog/regression-lineaire-avec-python/
+
+https://github.com/leogaudin/ft_linear_regression#linear-regression
+
+https://damien-vergobbi.fr/work/42-linear-regression
