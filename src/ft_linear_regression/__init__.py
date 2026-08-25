@@ -3,7 +3,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from train import training
 from train import train_step
+from train import training_exceptation
 from predict import estimate_price
+from train import cost_function
 
 def test_info(data: pd.DataFrame) -> None:
     """Affiche les informations utiles pour l'EDA et le contrôle des données."""
@@ -54,18 +56,12 @@ def main() -> None:
     #test_show(data)
     #print_fin(data)
     #training(train_data)
-    theta0 = 0.0
-    theta1 = 0.0
-    learning_rate = 0.1
-    iterations = 1000
 
-    for i in range(iterations):
-        theta0, theta1 = train_step(train_data, theta0, theta1, learning_rate)
-
-    print(f"theta0: {theta0}")
-    print(f"theta1: {theta1}")
-
-    test_resulatl = estimate_price()
+    theta0, theta1 = training_exceptation(train_data)
+    print( 
+        f"theta0={theta0:.2f}, "
+        f"theta1={theta1:.2f}"
+    )
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,33 @@ import pandas as pd
 from pathlib import Path
 from predict import estimate_price
 
+def training_exceptation(train_data: pd.DataFrame) -> tuple[float, float]:
+    theta0 = 0.0
+    theta1 = 0.0
+    learning_rate = 0.1
+    iterations = 5000
+    cost = cost_function(train_data, theta0, theta1)
+    for i in range(iterations):
+        theta0, theta1 = train_step(
+        train_data,
+        theta0,
+        theta1,
+        learning_rate,
+    )
+
+        if i % 100 == 0 or i == iterations - 1:
+            cost = cost_function(
+                train_data,
+                theta0,
+                theta1,
+            )
+            print(
+            f"Iteration {i}: "
+            f"cost={cost:.2f}, "
+            f"theta0={theta0:.2f}, "
+            f"theta1={theta1:.2f}"
+        )
+    return (theta0, theta1)
 
 
 def training(train_data: pd.DataFrame) -> None:
@@ -50,3 +77,27 @@ def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_
 
 
     return theta0, theta1
+
+def cost_function(
+    train_data: pd.DataFrame,
+    theta0: float,
+    theta1: float,
+) -> float:
+    mileage = train_data["km"] / train_data["km"].max()
+    price = train_data["price"]
+
+    m = len(mileage)
+    total_error = 0.0
+
+    for i in range(m):
+        prediction = estimate_price(
+            float(mileage.iloc[i]),
+            theta0,
+            theta1,
+        )
+
+        error = prediction - float(price.iloc[i])
+
+        total_error += error ** 2
+
+    return total_error / (2 * m)
