@@ -22,7 +22,7 @@ def save_parameters(theta0: float, theta1: float, max_mileage: float) -> None:
         json.dump(parameters, file, indent=4)
 
 
-def training(train_data: pd.DataFrame) -> tuple[float, float]:
+def train(train_data: pd.DataFrame) -> tuple[float, float]:
     theta0 = 0.0
     theta1 = 0.0
     learning_rate = 0.1

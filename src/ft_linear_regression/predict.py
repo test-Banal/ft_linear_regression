@@ -25,3 +25,14 @@ def load_parameters() -> tuple[float, float, float]:
     max_mileage = float(parameters["max_mileage"])
 
     return theta0, theta1, max_mileage
+
+def main() ->  None: 
+    theta0, theta1, max_mileage = load_parameters()
+    mileage = float(input("Mileage: "))
+    normalized_mileage = mileage / max_mileage
+    predict_price = estimate_price(normalized_mileage, theta0, theta1)
+    print("Estimated price: {predicted_price:.2f} €")
+
+
+if __name__ == "__main__":
+    main()

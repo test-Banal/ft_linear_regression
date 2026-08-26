@@ -41,6 +41,12 @@ def compare_predictions(
         label="Predicted prices",
     )
 
+    plt.plot(
+        mileage,
+        predicted_prices,
+        label="Linear regression",
+    )
+
     plt.xlabel("Mileage (km)")
     plt.ylabel("Price (€)")
     plt.title("Real prices vs predicted prices")
@@ -58,21 +64,14 @@ def main() -> None:
     #utils_edaprint_fin(data)
     #train.training_try(train_data)
 
-    theta0, theta1 = train.training(train_data)
+    theta0, theta1 = train.train(train_data)
 
-    compare_predictions(
+    """compare_predictions(
         train_data,
         theta0,
         theta1,
-    )   
+    )"""   
 
-
-
-    utils_eda.show_regression(
-        train_data,
-        theta0,
-        theta1,
-    )
     print( 
         f"theta0={theta0:.2f}, "
         f"theta1={theta1:.2f}"
@@ -83,7 +82,6 @@ def main() -> None:
         theta1,
         max_mileage,
 )
-
 
 if __name__ == "__main__":
     main()
