@@ -119,3 +119,45 @@ def cost_function(train_data: pd.DataFrame, theta0: float, theta1: float,) -> fl
         total_error += error ** 2
 
     return total_error / (2 * m)
+
+
+def main() -> None:
+    data_file = Path(__file__).resolve().parents[2] / "data" / "data.csv"
+    data = pd.read_csv(data_file)
+    train_data = data
+    required_columns = {"km", "price"}
+
+    if not required_columns.issubset(train_data.columns):
+        print("Error: dataset must contain 'km' and 'price' columns.")
+        return
+
+    if train_data.empty:
+        print("Error: dataset is empty.")
+        return
+
+    if train_data[["km", "price"]].isna().any().any():
+        print("Error: dataset contains missing values.")
+        return
+
+    if (train_data["km"] < 0).any():
+        print("Error: mileage values cannot be negative.")
+        return
+
+    if (train_data["price"] < 0).any():
+        print("Error: price values cannot be negative.")
+        return
+    theta0, theta1 = train(train_data) 
+
+    print( 
+        f"theta0={theta0:.2f}, "
+        f"theta1={theta1:.2f}"
+    )
+    max_mileage = float(train_data["km"].max())
+    save_parameters(
+        theta0,
+        theta1,
+        max_mileage,
+)
+
+if __name__ == "__main__":
+    main()
