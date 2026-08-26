@@ -1,6 +1,28 @@
+import json
 import pandas as pd
 from pathlib import Path
 from predict import estimate_price
+
+def save_parameters(
+    theta0: float,
+    theta1: float,
+    max_mileage: float,
+) -> None:
+    model_file = (
+        Path(__file__).resolve().parents[2]
+        / "model"
+        / "parameters.json"
+    )
+
+    parameters = {
+        "theta0": theta0,
+        "theta1": theta1,
+        "max_mileage": max_mileage,
+    }
+
+    with model_file.open("w") as file:
+        json.dump(parameters, file, indent=4)
+
 
 def training_exceptation(train_data: pd.DataFrame) -> tuple[float, float]:
     theta0 = 0.0
@@ -52,7 +74,7 @@ def training(train_data: pd.DataFrame) -> None:
     print(f"Predicted price: {prediction}")
     print(f"Error : {error}")
 
-def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_rate:0) -> tuple[float, float]:
+def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_rate:float) -> tuple[float, float]:
 
 #    mileage = train_data["km"]
     mileage = train_data["km"] / train_data["km"].max()
