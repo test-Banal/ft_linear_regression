@@ -9,3 +9,7 @@ https://moncoachdata.com/blog/regression-lineaire-avec-python/
 https://github.com/leogaudin/ft_linear_regression#linear-regression
 
 https://damien-vergobbi.fr/work/42-linear-regression
+
+https://www.geeksforgeeks.org/machine-learning/gradient-descent-in-linear-regression/
+
+https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent?hl=fr
