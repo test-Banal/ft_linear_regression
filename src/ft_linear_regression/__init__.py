@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 import train
-import utils_eda
+import utilseda
 import visualisation
 
 def main() -> None:
