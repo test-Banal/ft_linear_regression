@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ft_linear_regression = "ft_linear_regression:main"
+ft_linear_regression = "ft_linear_regression.__main__:main"
 
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]
@@ -31,6 +31,8 @@ school = [
     "ipykernel>=7.3.0",
     "jupyterlab>=4.6.3",
     "pytest>=9.1.1",
+    "scikit-learn>=1.9.0",
+    "scipy>=1.18.1",
 ]
 
 data = [

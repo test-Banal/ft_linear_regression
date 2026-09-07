@@ -1,7 +1,9 @@
 import json
-import pandas as pd
 from pathlib import Path
-import predict
+
+import pandas as pd
+
+from .predict import estimate_price
 
 def save_parameters(theta0: float, theta1: float, max_mileage: float) -> None:
     """Sauvegarde valeurs de theta0 et theta1 dans fichier JSON pour ne pas recommencer les calculs : bonne pratique
@@ -57,8 +59,8 @@ def training_try(train_data: pd.DataFrame) -> None:
     theta0 = 0.0
     theta1 = 0.0
 
-    prediction = predict.estimate_price(
-        mileage = float(mileage.iloc[0]),
+    prediction = estimate_price(
+        mileage=float(mileage.iloc[0]),
         theta0=theta0,
         theta1=theta1,
     )
@@ -83,7 +85,7 @@ def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_
     sum_error_theta1 = 0.0
 
     for i in range(m):
-        prediction = predict.estimate_price(mileage.iloc[i], theta0, theta1)
+        prediction = estimate_price(float(mileage.iloc[i]), theta0, theta1)
         error = prediction - float(price.iloc[i])
         sum_error_theta0 += error
         sum_error_theta1 += error * float(mileage.iloc[i])
@@ -108,7 +110,7 @@ def cost_function(train_data: pd.DataFrame, theta0: float, theta1: float,) -> fl
     total_error = 0.0
 
     for i in range(m):
-        prediction = predict.estimate_price(
+        prediction = estimate_price(
             float(mileage.iloc[i]),
             theta0,
             theta1,

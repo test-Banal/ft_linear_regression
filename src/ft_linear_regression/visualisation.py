@@ -1,6 +1,8 @@
-import pandas as pd
-from pathlib import Path
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
 
 def show_regression(
     data: pd.DataFrame,
@@ -32,6 +34,7 @@ def show_regression(
     plt.legend()
     plt.show()
 
+
 def compare_predictions(
     data: pd.DataFrame,
     theta0: float,
@@ -41,41 +44,69 @@ def compare_predictions(
 
     mileage = data["km"]
     real_prices = data["price"]
-
     normalized_mileage = mileage / max_mileage
+    predicted_prices = theta0 + theta1 * normalized_mileage
 
-    predicted_prices = (
-        theta0 + theta1 * normalized_mileage
+    # sklearn attend une matrice avec une colonne pour les donnees d'entree.
+    mileage_array = mileage.to_numpy(dtype=float)
+    real_prices_array = real_prices.to_numpy(dtype=float)
+    sklearn_model = LinearRegression()
+    sklearn_model.fit(mileage_array.reshape(-1, 1), real_prices_array)
+    sklearn_prices = sklearn_model.predict(mileage_array.reshape(-1, 1))
+
+    # polyfit retourne d'abord la pente, puis l'ordonnee a l'origine.
+    numpy_slope, numpy_intercept = np.polyfit(
+        mileage_array,
+        real_prices_array,
+        1,
     )
+    numpy_prices = numpy_intercept + numpy_slope * mileage_array
+
     for i in range(len(data)):
         print(
             f"{mileage.iloc[i]:.0f} km | "
             f"Real: {real_prices.iloc[i]:.2f} € | "
-            f"Predicted: {predicted_prices.iloc[i]:.2f} €"
+            f"Mine: {predicted_prices.iloc[i]:.2f} € | "
+            f"sklearn: {sklearn_prices[i]:.2f} € | "
+            f"polyfit: {numpy_prices[i]:.2f} €"
         )
-    
+
+    # Trier les x garantit que les droites sont tracees de gauche a droite.
+    order = np.argsort(mileage_array)
+
     plt.scatter(
         mileage,
         real_prices,
-        color="blue",
+        color="black",
         label="Real prices",
+        zorder=4,
     )
-
-    plt.scatter(
-        mileage,
-        predicted_prices,
-        color="red",
-        label="Predicted prices",
-    )
-
     plt.plot(
-        mileage,
-        predicted_prices,
-        label="Linear regression",
+        mileage_array[order],
+        predicted_prices.to_numpy()[order],
+        color="tab:blue",
+        linewidth=3,
+        label="Our gradient descent",
+    )
+    plt.plot(
+        mileage_array[order],
+        sklearn_prices[order],
+        color="tab:orange",
+        linestyle="--",
+        linewidth=2,
+        label="sklearn LinearRegression",
+    )
+    plt.plot(
+        mileage_array[order],
+        numpy_prices[order],
+        color="tab:green",
+        linestyle=":",
+        linewidth=3,
+        label="numpy.polyfit",
     )
 
     plt.xlabel("Mileage (km)")
     plt.ylabel("Price (€)")
-    plt.title("Real prices vs predicted prices")
+    plt.title("Real prices vs regression models")
     plt.legend()
     plt.show()
