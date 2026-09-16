@@ -57,10 +57,57 @@ def plot_comparison(
     order = np.argsort(mileages)
     figure, axes = plt.subplots(1, 2, figsize=(14, 5))
     axes[0].scatter(mileages, prices, color="black", label="Donnees", zorder=3)
+
+    colors = {
+        "Notre modele": "tab:blue",
+        "sklearn": "tab:orange",
+        "numpy.polyfit": "tab:green",
+        "scipy.curve_fit": "tab:red",
+    }
+    line_styles = {
+        "Notre modele": "-",
+        "sklearn": "--",
+        "numpy.polyfit": ":",
+        "scipy.curve_fit": "-.",
+    }
+    line_widths = {
+        "Notre modele": 4.0,
+        "sklearn": 3.0,
+        "numpy.polyfit": 2.5,
+        "scipy.curve_fit": 1.8,
+    }
+    markers = {
+        "Notre modele": "o",
+        "sklearn": "s",
+        "numpy.polyfit": "^",
+        "scipy.curve_fit": "D",
+    }
+    marker_sizes = {
+        "Notre modele": 110,
+        "sklearn": 75,
+        "numpy.polyfit": 45,
+        "scipy.curve_fit": 20,
+    }
+
     for name, values in predictions.items():
         array = np.asarray(values)
-        axes[0].plot(mileages[order], array[order], label=name)
-        axes[1].scatter(mileages, prices - array, label=name, alpha=0.75)
+        axes[0].plot(
+            mileages[order],
+            array[order],
+            color=colors[name],
+            linestyle=line_styles[name],
+            linewidth=line_widths[name],
+            label=name,
+        )
+        axes[1].scatter(
+            mileages,
+            prices - array,
+            color=colors[name],
+            marker=markers[name],
+            s=marker_sizes[name],
+            label=name,
+            alpha=0.85,
+        )
 
     axes[0].set(
         title="Comparaison des regressions",

@@ -1,0 +1,40 @@
+Checker : normalized_mileage
+	  pyplot
+BONUS: 
+
+
+1) Afficher points : avec Matplotib.pyplot
+   Fichier : visualisation.py, dans la fonction compare_prediction : les prices, mes prices trouvees, et la regression lineaire. 
+
+2) 
+
+
+BONUS PERSO : 
+Pourquoi les memes resultats avec fonctions toutes faites :
+
+Les trois méthodes obtiennent les mêmes résultats parce qu’elles cherchent exactement la même solution : la droite qui minimise la somme des erreurs au carré.
+- Notre modèle atteint cette solution progressivement par descente de gradient.
+- LinearRegression utilise une résolution analytique ou numérique optimisée.
+- numpy.polyfit calcule les coefficients du polynôme de degré 1 minimisant les carrés.
+- curve_fit optimise les paramètres de la même fonction linéaire.
+
+Ce qui change entre les méthodes
+Ton modèle utilise une descente de gradient :
+1. il commence avec theta0 = 0 et theta1 = 0 ;
+2. il mesure l’erreur ;
+3. il déplace légèrement les deux paramètres ;
+4. il recommence 5 000 fois.
+Il s’approche donc progressivement du minimum.
+sklearn, numpy.polyfit et scipy.curve_fit utilisent des méthodes mathématiques ou numériques plus directes et optimisées. Mais elles cherchent le même minimum sur les mêmes données.
+On peut l’imaginer comme quatre personnes cherchant le point le plus bas d’une vallée :
+- ton algorithme descend progressivement la pente ;
+- les bibliothèques calculent plus directement où se trouve le fond ;
+- toutes finissent au même endroit.
+Pourquoi ton modèle converge aussi bien
+La fonction d’erreur d’une régression linéaire forme une surface convexe, ressemblant à un bol. Elle ne possède qu’un seul minimum global.
+
+Différences entre :
+	- optimisation : trouver la meilleure droite possible ici
+	- précision: avoir un modele qui represente correctement la réalité
+
+Ici seulement 24 observations pour un seul paramètre d'entrée. Pour augmenter la précision il faudrait, 

@@ -30,10 +30,8 @@ MATHEMATIQUE :
 tmptheta0 = derive partielle en fonction de theta0
 tmptheta1 = derive partielle en fonction de theta1
 
-
-
-FINAL :
-COmparer resultat avec : sklkearn.linear_model.LinearRegression
-			 numpy.polyfit
-			 scipy optimisation
-			 Modele ML deja implemente
+Les trois méthodes obtiennent les mêmes résultats parce qu’elles cherchent exactement la même solution : la droite qui minimise la somme des erreurs au carré.
+- Notre modèle atteint cette solution progressivement par descente de gradient.
+- LinearRegression utilise une résolution analytique ou numérique optimisée.
+- numpy.polyfit calcule les coefficients du polynôme de degré 1 minimisant les carrés.
+- curve_fit optimise les paramètres de la même fonction linéaire.
