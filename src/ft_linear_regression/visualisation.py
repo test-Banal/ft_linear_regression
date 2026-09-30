@@ -1,3 +1,8 @@
+"""Visualise les prix observés et les prédictions de la régression linéaire.
+
+Propose des graphiques et une comparaison chiffrée pour examiner l'ajustement
+du modèle. L'exécution du module entraîne le modèle avant de tracer sa droite."""
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -11,6 +16,7 @@ def show_regression(
     theta0: float,
     theta1: float,
 ) -> None:
+    """Affiche les prix observés et la droite prédite après normalisation du kilométrage."""
     max_mileage = float(data["km"].max())
 
     mileage = data["km"]
@@ -42,6 +48,7 @@ def compare_predictions(
     theta0: float,
     theta1: float,
 ) -> None:
+    """Affiche les prix réels et prédits pour chaque voiture, puis les compare en graphique."""
     max_mileage = float(data["km"].max())
 
     mileage = data["km"]
@@ -88,6 +95,7 @@ def compare_predictions(
 
 
 def main() -> None:
+    """Charge le CSV, entraîne le modèle et affiche le graphique de régression."""
     data_file = Path(__file__).resolve().parents[2] / "data" / "data.csv"
 
     try:

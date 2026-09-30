@@ -1,3 +1,8 @@
+"""Entraîne une régression linéaire pour prédire le prix selon le kilométrage.
+
+Apprend theta0 et theta1 par descente de gradient sur les kilométrages
+normalisés, puis sauvegarde les paramètres nécessaires aux prédictions."""
+
 import json
 from pathlib import Path
 
@@ -6,8 +11,7 @@ import pandas as pd
 from .predict import estimate_price
 
 def save_parameters(theta0: float, theta1: float, max_mileage: float) -> None:
-    """Sauvegarde valeurs de theta0 et theta1 dans fichier JSON pour ne pas recommencer les calculs : bonne pratique
-    """
+    """Enregistre theta0, theta1 et le facteur de normalisation dans le fichier JSON."""
     model_file = (
         Path(__file__).resolve().parents[2]
         / "model"
@@ -25,6 +29,7 @@ def save_parameters(theta0: float, theta1: float, max_mileage: float) -> None:
 
 
 def train(train_data: pd.DataFrame) -> tuple[float, float]:
+    """Effectue 5 000 étapes de descente de gradient et renvoie les paramètres appris."""
     theta0 = 0.0
     theta1 = 0.0
     learning_rate = 0.1
@@ -53,6 +58,7 @@ def train(train_data: pd.DataFrame) -> tuple[float, float]:
 
 
 def training_try(train_data: pd.DataFrame) -> None:
+    """Illustre la prédiction et son erreur sur la première ligne avec des paramètres nuls."""
     mileage = train_data["km"]
     price = train_data["price"]
 
@@ -74,8 +80,7 @@ def training_try(train_data: pd.DataFrame) -> None:
     print(f"Error : {error}")
 
 def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_rate:float) -> tuple[float, float]:
-    """effectuer une etape de gradient descent
-    """
+    """Normalise les kilométrages et met à jour les deux paramètres à partir des gradients."""
 #    mileage = train_data["km"]
     mileage = train_data["km"] / train_data["km"].max()
     price  = train_data["price"]
@@ -101,8 +106,7 @@ def train_step(train_data: pd.DataFrame, theta0: float, theta1: float, learning_
     return theta0, theta1
 
 def cost_function(train_data: pd.DataFrame, theta0: float, theta1: float,) -> float:
-    """Mesure l'erreur
-    """
+    """Calcule la demi-erreur quadratique moyenne sur les kilométrages normalisés."""
     mileage = train_data["km"] / train_data["km"].max()
     price = train_data["price"]
 
@@ -124,6 +128,7 @@ def cost_function(train_data: pd.DataFrame, theta0: float, theta1: float,) -> fl
 
 
 def main() -> None:
+    """Charge et contrôle les données, entraîne le modèle et sauvegarde ses paramètres."""
     data_file = Path(__file__).resolve().parents[2] / "data" / "data.csv"
     data = pd.read_csv(data_file)
     train_data = data

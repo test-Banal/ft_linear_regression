@@ -1,3 +1,8 @@
+"""Fournit les outils d'analyse exploratoire des données de voitures.
+
+Les fonctions permettent de contrôler la qualité des données, de consulter
+leurs statistiques et de visualiser le lien entre kilométrage et prix."""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 

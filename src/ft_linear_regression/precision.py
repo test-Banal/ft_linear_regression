@@ -1,3 +1,8 @@
+"""Mesure la précision des prédictions et vérifie les formules de métriques maison.
+
+Calcule MAE, MSE, RMSE et R², puis les compare aux résultats de scikit-learn.
+Évalue le modèle sauvegardé et une régression scikit-learn sur les données du CSV."""
+
 import json
 from math import sqrt
 from pathlib import Path
@@ -10,6 +15,7 @@ METRIC_NAMES = ("mae", "mse", "rmse", "r2")
 
 
 def _as_floats(values: pd.Series) -> list[float]:
+    """Convertit une série pandas en liste de nombres flottants."""
     return [float(value) for value in values]
 
 
@@ -19,7 +25,7 @@ def predicted_prices(
     theta1: float,
     max_mileage: float,
 ) -> list[float]:
-    """Apply the trained model to each mileage (same normalization as predict)."""
+    """Normalise chaque kilométrage avec le maximum appris, puis calcule le prix prédit."""
     return [
         estimate_price(float(mileage) / max_mileage, theta0, theta1)
         for mileage in mileages
@@ -27,7 +33,7 @@ def predicted_prices(
 
 
 def mean_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
-    """MAE: average absolute error, in the same unit as price (€)."""
+    """Calcule la MAE : moyenne des erreurs absolues de prix, en euros."""
     m = len(y_true)
     if m == 0:
         raise ValueError("Cannot compute MAE on an empty dataset.")
@@ -38,7 +44,7 @@ def mean_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
 
 
 def mean_squared_error(y_true: list[float], y_pred: list[float]) -> float:
-    """MSE: average squared error. Penalizes large mistakes more than MAE."""
+    """Calcule la MSE : moyenne des erreurs au carré, qui accentue les grandes erreurs."""
     m = len(y_true)
     if m == 0:
         raise ValueError("Cannot compute MSE on an empty dataset.")
@@ -50,12 +56,15 @@ def mean_squared_error(y_true: list[float], y_pred: list[float]) -> float:
 
 
 def root_mean_squared_error(y_true: list[float], y_pred: list[float]) -> float:
-    """RMSE: square root of MSE, back in €."""
+    """Calcule la RMSE : racine de la MSE, exprimée en euros."""
     return sqrt(mean_squared_error(y_true, y_pred))
 
 
 def r2_score(y_true: list[float], y_pred: list[float]) -> float:
-    """R²: 1 if predictions match perfectly, 0 if no better than predicting the mean."""
+    """Calcule R² : 1 pour une prédiction parfaite, 0 pour le score de la moyenne.
+
+    Un score négatif indique un résultat moins bon que cette référence.
+    Si tous les prix sont identiques, renvoie 1 si l'erreur est nulle, sinon 0."""
     m = len(y_true)
     if m == 0:
         raise ValueError("Cannot compute R² on an empty dataset.")
@@ -76,6 +85,7 @@ def homemade_metrics(
     y_true: list[float],
     y_pred: list[float],
 ) -> dict[str, float]:
+    """Regroupe les scores MAE, MSE, RMSE et R² calculés avec les formules maison."""
     return {
         "mae": mean_absolute_error(y_true, y_pred),
         "mse": mean_squared_error(y_true, y_pred),
@@ -88,6 +98,7 @@ def sklearn_metrics(
     y_true: list[float],
     y_pred: list[float],
 ) -> dict[str, float]:
+    """Calcule les quatre métriques avec scikit-learn pour vérifier les formules maison."""
     from sklearn.metrics import mean_absolute_error as sk_mae
     from sklearn.metrics import mean_squared_error as sk_mse
     from sklearn.metrics import r2_score as sk_r2
@@ -102,7 +113,7 @@ def sklearn_metrics(
 
 
 def sklearn_linear_regression_prices(train_data: pd.DataFrame) -> list[float]:
-    """OLS fit from scikit-learn — comparison only, not used to train our model."""
+    """Ajuste une régression scikit-learn et prédit les prix sur les mêmes données."""
     from sklearn.linear_model import LinearRegression
 
     mileages = train_data[["km"]].to_numpy()
@@ -114,6 +125,7 @@ def sklearn_linear_regression_prices(train_data: pd.DataFrame) -> list[float]:
 
 
 def print_metrics_block(title: str, metrics: dict[str, float]) -> None:
+    """Affiche un titre et les quatre métriques avec une précision de huit décimales."""
     print(title)
     print(f"  MAE  : {metrics['mae']:.8f} €")
     print(f"  MSE  : {metrics['mse']:.8f}")
@@ -125,12 +137,14 @@ def print_deltas(
     homemade: dict[str, float],
     reference: dict[str, float],
 ) -> None:
+    """Affiche les écarts entre les métriques maison et celles de scikit-learn."""
     print("  Delta (homemade - sklearn.metrics)")
     for name in METRIC_NAMES:
         print(f"    {name.upper():<4}: {homemade[name] - reference[name]:.2e}")
 
 
 def main() -> None:
+    """Valide les fichiers et compare les métriques maison et sklearn pour les deux modèles."""
     data_file = Path(__file__).resolve().parents[2] / "data" / "data.csv"
     model_file = Path(__file__).resolve().parents[2] / "model" / "parameters.json"
 

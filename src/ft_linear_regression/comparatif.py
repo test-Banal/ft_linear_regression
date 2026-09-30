@@ -1,4 +1,7 @@
-"""Compare le modele fait maison a des regressions lineaires de bibliotheques."""
+"""Compare le modèle maison aux régressions de scikit-learn, NumPy et SciPy.
+
+Évalue leurs prédictions sur les mêmes données avec MAE, RMSE et R², puis
+propose des graphiques des droites ajustées et des résidus."""
 
 import argparse
 import json
@@ -17,12 +20,14 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def linear_function(x: np.ndarray, intercept: float, slope: float) -> np.ndarray:
+    """Évalue la droite intercept + slope × x pour les valeurs fournies."""
     return intercept + slope * x
 
 
 def library_predictions(
     mileages: np.ndarray, prices: np.ndarray
 ) -> dict[str, np.ndarray]:
+    """Ajuste trois régressions de bibliothèques et renvoie leurs prédictions sur les données."""
     sklearn_model = LinearRegression().fit(mileages.reshape(-1, 1), prices)
     polyfit_slope, polyfit_intercept = np.polyfit(mileages, prices, 1)
     scipy_parameters, _ = curve_fit(linear_function, mileages, prices)
@@ -37,6 +42,7 @@ def library_predictions(
 def print_comparison(
     predictions: dict[str, list[float] | np.ndarray], prices: list[float]
 ) -> None:
+    """Affiche un tableau des scores MAE, RMSE et R² pour chaque modèle."""
     print(f"{'Modele':<20} {'MAE (€)':>12} {'RMSE (€)':>12} {'R2':>10}")
     print("-" * 58)
     for name, values in predictions.items():
@@ -54,6 +60,7 @@ def plot_comparison(
     prices: np.ndarray,
     predictions: dict[str, list[float] | np.ndarray],
 ) -> None:
+    """Trace les droites de régression et les résidus de chaque modèle."""
     order = np.argsort(mileages)
     figure, axes = plt.subplots(1, 2, figsize=(14, 5))
     axes[0].scatter(mileages, prices, color="black", label="Donnees", zorder=3)
@@ -127,6 +134,7 @@ def plot_comparison(
 
 
 def main() -> None:
+    """Charge les données et le modèle, puis lance la comparaison avec un graphique optionnel."""
     parser = argparse.ArgumentParser(
         description="Compare plusieurs regressions lineaires."
     )

@@ -1,4 +1,7 @@
-"""Analyse complementaire de la precision du modele fait maison."""
+"""Complète l'évaluation du modèle maison par une analyse des erreurs.
+
+Compare ses performances à une prédiction constante égale au prix moyen.
+Ajoute l'erreur médiane, l'erreur maximale et des graphiques de diagnostic."""
 
 import argparse
 import json
@@ -14,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def median_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
-    """Retourne la mediane des erreurs absolues, en euros."""
+    """Renvoie la médiane des erreurs absolues de prix, en euros."""
     if not y_true:
         raise ValueError("Cannot compute an error on an empty dataset.")
     errors = sorted(
@@ -28,7 +31,7 @@ def median_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
 
 
 def max_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
-    """Retourne la plus grande erreur absolue, en euros."""
+    """Renvoie la plus grande erreur absolue de prix, en euros."""
     if not y_true:
         raise ValueError("Cannot compute an error on an empty dataset.")
     return max(
@@ -38,7 +41,7 @@ def max_absolute_error(y_true: list[float], y_pred: list[float]) -> float:
 
 
 def mean_baseline(y_true: list[float]) -> list[float]:
-    """Baseline naive : predit toujours le prix moyen observe."""
+    """Construit une prédiction de référence égale au prix moyen pour chaque observation."""
     if not y_true:
         raise ValueError("Cannot build a baseline on an empty dataset.")
     mean_price = sum(y_true) / len(y_true)
@@ -51,7 +54,7 @@ def plot_precision(
     y_pred: list[float],
     baseline_pred: list[float],
 ) -> None:
-    """Affiche les residus et des metriques comparables graphiquement."""
+    """Trace les résidus du modèle et compare ses erreurs à celles de la référence moyenne."""
     model_metrics = homemade_metrics(y_true, y_pred)
     baseline_metrics = homemade_metrics(y_true, baseline_pred)
     model_euro_metrics = [
@@ -101,6 +104,7 @@ def plot_precision(
 
 
 def main() -> None:
+    """Évalue le modèle et la référence moyenne, puis affiche les graphiques sauf avec --no-plot."""
     parser = argparse.ArgumentParser(description="Mesure la precision du modele.")
     parser.add_argument(
         "--no-plot", action="store_true", help="N'affiche pas les graphes."

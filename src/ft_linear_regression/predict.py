@@ -1,3 +1,8 @@
+"""Estime le prix d'une voiture à partir de son kilométrage.
+
+Charge les paramètres sauvegardés du modèle et normalise le kilométrage saisi.
+Compare aussi l'estimation aux régressions de scikit-learn et de NumPy."""
+
 import json
 from pathlib import Path
 
@@ -11,10 +16,12 @@ def estimate_price(
     theta0: float,
     theta1: float,
 ) -> float:
+    """Calcule theta0 + theta1 × mileage, avec un kilométrage déjà normalisé."""
     return theta0 + theta1 * mileage
 
 
 def load_parameters() -> tuple[float, float, float]:
+    """Lit le JSON du modèle et renvoie theta0, theta1 et le kilométrage maximal."""
     model_file = (
         Path(__file__).resolve().parents[2]
         / "model"
@@ -32,7 +39,7 @@ def load_parameters() -> tuple[float, float, float]:
 
 
 def library_estimates(data: pd.DataFrame, mileage: float) -> tuple[float, float]:
-    """Calcule les estimations de sklearn et numpy pour comparaison."""
+    """Ajuste les modèles sklearn et NumPy, puis estime le prix au kilométrage donné."""
     mileages = data["km"].to_numpy(dtype=float)
     prices = data["price"].to_numpy(dtype=float)
 
@@ -46,6 +53,7 @@ def library_estimates(data: pd.DataFrame, mileage: float) -> tuple[float, float]
 
 
 def main() -> None:
+    """Valide les données et la saisie, puis affiche les trois estimations de prix."""
     root = Path(__file__).resolve().parents[2]
     model_file = root / "model" / "parameters.json"
     data_file = root / "data" / "data.csv"
