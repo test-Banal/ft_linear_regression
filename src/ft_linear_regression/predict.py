@@ -59,26 +59,29 @@ def main() -> None:
     data_file = root / "data" / "data.csv"
 
     if not model_file.exists():
+        print("0")
         print("Error: model has not been trained yet.")
         return
 
     try:
         theta0, theta1, max_mileage = load_parameters()
     except json.JSONDecodeError:
+        print("0")
         print("Error: model parameters file is corrupted.")
         return
     except KeyError:
+        print("0")
         print("Error: model parameters are incomplete.")
         return
 
     if max_mileage <= 0:
-        print("Error: invalid model normalization value.")
+        print("Error: invalid model value.")
         return
 
     try:
         data = pd.read_csv(data_file)
     except FileNotFoundError:
-        print(f"Error: data file not found: {data_file}")
+        print(f"Error: data file not fo() und: {data_file}")
         return
     except (pd.errors.EmptyDataError, pd.errors.ParserError):
         print(f"Error: invalid data file: {data_file}")

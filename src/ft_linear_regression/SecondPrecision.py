@@ -1,4 +1,7 @@
-"""Complète l'évaluation du modèle maison par une analyse des erreurs.
+"""BONUS BONUS 
+A ENLEVER
+
+Complète l'évaluation du modèle maison par une analyse des erreurs.
 
 Compare ses performances à une prédiction constante égale au prix moyen.
 Ajoute l'erreur médiane, l'erreur maximale et des graphiques de diagnostic."""

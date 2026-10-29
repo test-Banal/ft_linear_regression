@@ -1,4 +1,7 @@
-"""Compare le modèle maison aux régressions de scikit-learn, NumPy et SciPy.
+"""
+A enlever pour git
+
+Compare le modèle maison aux régressions de scikit-learn, NumPy et SciPy.
 
 Évalue leurs prédictions sur les mêmes données avec MAE, RMSE et R², puis
 propose des graphiques des droites ajustées et des résidus."""
